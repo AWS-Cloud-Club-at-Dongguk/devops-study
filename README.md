@@ -52,10 +52,11 @@ Ref. https://github.com/Meet-Coder-Study/book-system-design-interview
      캐시 무효화 정책으로 LRU 외에 어떤 방식이 있고, 실제 시스템에서는 어떤 기준으로 선택하나요?
      ```
 2. **발표**
-   - 발표자는 발표 자료를 `N장/` 경로에 업로드한 뒤, PR 생성
+   - 발표자는 발표 자료를 `N/` 경로에 업로드한 뒤, PR 생성
    - **브랜치명 형식**: `{nickname}/chapter{number}`  
      예: `eunji/chapter03`
    - **PR 제목 예시**: `[N주차] N장_주제_이름`
+   - **파일명 형식**: `{nickname}/*`
 3. **토론**
    - 질문 Issue 중심으로 토론 진행
    - 모든 참여자는 하나 이상의 질문을 등록해야 참여 인정
