@@ -29,7 +29,7 @@
 
 아래는 기본적으로 동작하는, 외부 접속이 가능한 프로젝트의 최소 구조이다.
 
-![![단일 서버 구성도](images/image-1.png)](images/image-1.png)
+<div align="center"><img src="images/image-1.png" alt="단일 서버 구성도" width="66%"></div>
 
 ### 동작 과정
 
@@ -68,7 +68,7 @@
 
 앞서 발생한 성능 병목 문제를 해결하기 위해 웹서버와 데이터베이스를 분리합니다.
 
-![![데이터베이스 분리 구성도](images/image-2.png)](images/image-2.png)
+<div align="center"><img src="images/image-2.png" alt="데이터베이스 분리 구성도" width="66%"></div>
 
 **개선 효과**
 - 웹서버는 HTTP 요청 처리에만 집중
@@ -153,7 +153,7 @@
 
 로드밸런서는 부하 분산 집합에 속한 웹 서버들에게 트래픽 부하를 고르게 분산하는 역할을 한다.
 
-![![로드밸런서 구성도](images/image-3.png)](images/image-3.png)
+<div align="center"><img src="images/image-3.png" alt="로드밸런서 구성도" width="66%"></div>
 
 **동작 과정**
 1. 사용자는 로드밸런서의 공개 IP 주소로 접속
@@ -162,7 +162,7 @@
 
 ### 데이터 계층 서버 확장 - 데이터베이스 다중화
 
-![![데이터베이스 다중화 구성도](images/image-4.png)](images/image-4.png)
+<div align="center"><img src="images/image-4.png" alt="데이터베이스 다중화 구성도" width="66%"></div>
 
 데이터 계층의 장애 복구와 다중화는 **마스터-슬레이브(master-slave) 복제** 방식으로 해결할 수 있다.
 
@@ -192,7 +192,7 @@
 
 로드밸런서와 데이터베이스 다중화를 적용한 최종 구성도입니다.
 
-![![최종 구성도](images/image-5.png)](images/image-5.png)
+<div align="center"><img src="images/image-5.png" alt="최종 구성도" width="66%"></div>
 
 **동작 흐름**
 1. 사용자가 DNS로부터 로드밸런서의 공개 IP 주소를 받음
@@ -223,7 +223,7 @@
 
 #### 캐시 계층
 
-![![캐시 계층 구성도](images/image-6.png)](images/image-6.png)
+<div align="center"><img src="images/image-6.png" alt="캐시 계층 구성도" width="66%"></div>
 
 **동작 과정** (읽기 주도형 캐시 전략)
 1. 웹 서버가 캐시에 응답이 저장되어 있는지 확인
@@ -261,8 +261,8 @@ cache.get('myKey')
 CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산된 서버 네트워크이다.
 이미지, 비디오, CSS, JavaScript 파일 등을 캐시할 수 있다.
 
-![![CDN 동작 과정](images/image-8.png)](images/image-8.png)
-![![CDN 구성도](images/image-9.png)](images/image-9.png)
+<div align="center"><img src="images/image-8.png" alt="CDN 동작 과정" width="66%"></div>
+<div align="center"><img src="images/image-9.png" alt="CDN 구성도" width="66%"></div>
 
 #### 동작 과정
 
@@ -286,7 +286,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 1. **CDN**: 웹사이트 로딩 속도 개선
 2. **캐시**: 데이터베이스 호출 속도 개선
 
-![![최종 성능 개선 구성도](images/image-10.png)](images/image-10.png)
+<div align="center"><img src="images/image-10.png" alt="최종 성능 개선 구성도" width="66%"></div>
 
 ---
 
@@ -306,7 +306,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 ### 상태 정보 의존적인 아키텍처의 문제점
 
-![![alt text](images/image-11.png)](images/image-11.png)
+<div align="center"><img src="images/image-11.png" alt="alt text" width="66%"></div>
 
 **원인 분석**:
 - 사용자 A의 세션 정보가 서버 1에만 저장됨
@@ -317,7 +317,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 ### 무상태 아키텍처
 
-![![alt text](images/image-12.png)](images/image-12.png)
+<div align="center"><img src="images/image-12.png" alt="alt text" width="66%"></div>
 
 **장점**
 - HTTP 요청이 어떤 웹 서버로도 전달 가능
@@ -327,7 +327,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 ### 무상태 웹 계층 적용 설계
 
-![![alt text](images/image-13.png)](images/image-13.png)
+<div align="center"><img src="images/image-13.png" alt="alt text" width="66%"></div>
 
 **주요 변경사항**
 - 세션 데이터를 웹 계층에서 분리하여 지속성 저장소에 보관
@@ -360,7 +360,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 전 세계 여러 지역에 데이터센터를 구축하여 사용자와 가까운 곳에서 서비스 제공한다.
 
-![![alt text](images/image-14.png)](images/image-14.png)
+<div align="center"><img src="images/image-14.png" alt="alt text" width="66%"></div>
 
 **지리적 라우팅(GeoDNS)**
 - 사용자 위치에 따라 도메인 이름을 적절한 IP 주소로 변환
@@ -369,7 +369,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 ### 데이터 센터 장애 대응
 
-![![alt text](images/image-15.png)](images/image-15.png)
+<div align="center"><img src="images/image-15.png" alt="alt text" width="66%"></div>
 
 **장애 발생 시**
 - 장애가 발생한 데이터 센터의 모든 트래픽을 정상 데이터 센터로 우회
@@ -409,7 +409,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 메시지의 무손실을 보장하는 비동기 통신을 지원하는 컴포넌트
 시스템 컴포넌트를 분리하여 각각 독립적으로 확장할 수 있도록 한다.
 
-![![alt text](images/image-16.png)](images/image-16.png)
+<div align="center"><img src="images/image-16.png" alt="alt text" width="66%"></div>
 
 **구성 요소**
 - **생산자(Producer)**: 메시지를 만들어 큐에 발행
@@ -423,7 +423,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 ### 메시지 큐 사용 예시
 
-![![alt text](images/image-17.png)](images/image-17.png)
+<div align="center"><img src="images/image-17.png" alt="alt text" width="66%"></div>
 
 **동작 흐름**
 1. 웹 서버가 사진 보정 작업을 메시지 큐에 발행
@@ -471,7 +471,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 ### 최종 설계안 (메시지 큐, 로그, 메트릭, 자동화 적용)
 
-![![alt text](images/image-18.png)](images/image-18.png)
+<div align="center"><img src="images/image-18.png" alt="alt text" width="66%"></div>
 
 **개선사항**
 1. 메시지 큐로 컴포넌트 간 느슨한 결합 및 결함 내성 향상
@@ -512,13 +512,13 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 ### 데이터베이스 서버의 수평적 확장 (샤딩, Sharding)
 
-![![alt text](images/image-19.png)](images/image-19.png)
+<div align="center"><img src="images/image-19.png" alt="alt text" width="66%"></div>
 
 대규모 데이터베이스를 샤드라는 작은 단위로 분할하는 기술
 
 ### 샤딩 구현
 
-![![alt text](images/image-20.png)](images/image-20.png)
+<div align="center"><img src="images/image-20.png" alt="alt text" width="66%"></div>
 
 **특징**
 - 모든 샤드는 같은 스키마 사용
@@ -527,7 +527,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 **예시**: `user_id % 4`를 해시 함수로 사용하여 샤드 결정
 
-![![alt text](images/image-21.png)](images/image-21.png)
+<div align="center"><img src="images/image-21.png" alt="alt text" width="66%"></div>
 
 ### 샤딩 시 고려사항
 
@@ -552,7 +552,7 @@ CDN은 정적 콘텐츠를 전송하는 데 사용되는 지리적으로 분산�
 
 ### 샤딩 적용 최종 구성도
 
-![![alt text](images/image-22.png)](images/image-22.png)
+<div align="center"><img src="images/image-22.png" alt="alt text" width="66%"></div>
 
 **주요 변경사항**
 1. 데이터베이스를 여러 샤드로 분할
