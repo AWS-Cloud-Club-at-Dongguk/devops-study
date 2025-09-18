@@ -4,8 +4,7 @@
 
 모든 컴포넌트가 단 한대의 서버에서 실행되는 간단한 시스템 설계
 
-> v1 기본 구조 <br>
-> <img src="image.png" alt="v1 기본 구조" width="600">
+> v1 기본 구조 <br> > <img src="images/image.png" alt="v1 기본 구조" width="600">
 
 1. 사용자가 도메인 이름을 DNS에 질의하여 IP 주소로 변환
 2. DNS 조회 결과로 IP 주소 반환
@@ -14,8 +13,7 @@
 
 ## 데이터베이스
 
-> v2 DB 추가 <br>
-> <img src="image-1.png" alt="DB 추가" width="600">
+> v2 DB 추가 <br> > <img src="images/image-1.png" alt="DB 추가" width="600">
 
 ### 어떤 데이터베이스를 사용할 것인가?
 
@@ -59,8 +57,7 @@
 
 부하 분산 집합에 속한 웹 서버들에게 트래픽 부하를 고르게 분산하는 역할
 
-> v3 로드밸런서 적용 <br>
-> <img src="image-2.png" alt="로드밸런서 적용" width="600">
+> v3 로드밸런서 적용 <br> > <img src="images/image-2.png" alt="로드밸런서 적용" width="600">
 
 동작방법
 
@@ -86,14 +83,14 @@
 - 대부분 읽기 연산의 비중이 쓰기 연산보다 훨씬 높다.
 - 따라서 부 데이터베이스의 수가 더 많다.
 
-<img src="image-3.png" alt="데이터베이스 다중화" width="600"> <br>
+<img src="images/image-3.png" alt="데이터베이스 다중화" width="600"> <br>
 이렇게 데이터베이스를 다중화하면 다음과 같은 이득이 있다.
+
 - 더 나은 성능
 - 안정성
 - 가용성
 
-> v4 로드밸런서와 데이터베이스 다중화를 고려한 설계안 <br>
-> <img src="image-4.png" alt="로드밸런서와 데이터베이스 다중화" width="600">
+> v4 로드밸런서와 데이터베이스 다중화를 고려한 설계안 <br> > <img src="images/image-4.png" alt="로드밸런서와 데이터베이스 다중화" width="600">
 
 - 사용자는 DNS로부터 로드밸런서 공개 IP 주소를 받는다.
 - 사용자는 해당 IP 주소를 사용해 로드밸런서에 접속한다.
@@ -110,7 +107,7 @@
 ### 캐시 계층
 
 데이터가 잠시 보관되는 곳 <br>
-<img src="image-5.png" alt="캐시 계층" width="600">
+<img src="images/image-5.png" alt="캐시 계층" width="600">
 
 - 그림과 같은 캐시 전략을 읽기 주도형 캐시 전략이라고 부른다.
 - 대부분의 캐시 서버는 API를 제공한다.
@@ -127,7 +124,7 @@
   - 일관성:데이터 저장소의 원본과 캐시 내의 사본이 같은지 여부
 - 장애에는 어떻게 대처할 것인가?
   - SPOF를 피하려면 여러 지역에 걸쳐 캐시 서버를 분산시켜야 한다.
-    <img src="image-6.png" alt="캐시 서버 분산" width="600">
+    <img src="images/image-6.png" alt="캐시 서버 분산" width="600">
 - 캐시 메모리는 얼마나 크게 잡을 것인가?
   - 방법은 캐시 메모리를 과할당 하는 것
 - 데이터 방출 정책은 무엇인가?
@@ -137,13 +134,12 @@
 ### 콘텐츠 전송 네트워크(CDN)
 
 지리적으로 분산된 서버의 네트워크 <br>
-<img src="image-7.png" alt="CDN" width="600">
+<img src="images/image-7.png" alt="CDN" width="600">
 
 CDN 동장 방법 <br>
-<img src="image-8.png" alt="CDN 동작 방법" width="600">
+<img src="images/image-8.png" alt="CDN 동작 방법" width="600">
 
-> v5 CDN과 캐시가 추가된 설계 <br>
-> <img src="image-9.png" alt="CDN과 캐시가 추가된 설계" width="600">
+> v5 CDN과 캐시가 추가된 설계 <br> > <img src="images/image-9.png" alt="CDN과 캐시가 추가된 설계" width="600">
 
 변화된 부분
 
@@ -160,20 +156,21 @@ CDN 동장 방법 <br>
 
 ### 상태 정보 의존적인 아키텍처
 
-<img src="image-10.png" alt="상태 정보 의존적인 아키텍처"  width="600"> <br>
-- 문제는 같은 클라이언트로부터의 요청은 항상 같은 서버로 전송되어야 한다는 것이다. 
+<img src="images/image-10.png" alt="상태 정보 의존적인 아키텍처"  width="600"> <br>
+
+- 문제는 같은 클라이언트로부터의 요청은 항상 같은 서버로 전송되어야 한다는 것이다.
 - 이는 로드밸런서에 부담을 주고 장애 처리도 복잡해진다.
 
 ### 무상태 아키텍처
 
-<img src="image-11.png" alt="무상태 아키텍처" width="600"> <br>
+<img src="images/image-11.png" alt="무상태 아키텍처" width="600"> <br>
+
 - 이 구조는 상태 정보 의존적인 아키텍처와 가르게 사용자의 HTTP 요청은 어떤 웹 서버로도 전달될 수 있다.
 - 상태 정보가 필요할 경우 공유 저장소로부터 데이터를 가져온다.
-- 따라서 상태 정보는 웹 서버로부터 물리적으로 분리되어 있다. 
+- 따라서 상태 정보는 웹 서버로부터 물리적으로 분리되어 있다.
 - 이 구조는 단순하고, 안정적이며, 규모 확장이 쉽다.
 
-> v6 무상태 웹 계층 추가 <br>
-> <img src="image-12.png" alt="무상태 웹 계층 추가" width="600">
+> v6 무상태 웹 계층 추가 <br> > <img src="images/image-12.png" alt="무상태 웹 계층 추가" width="600">
 
 - 세션 데이터를 웹 계층에서 분리하고 DB에 저장
   - 그림에서는 규모 확장이 간편한 NoSQL 선택
@@ -182,19 +179,17 @@ CDN 동장 방법 <br>
 
 - 장애가 없는 상황에서 사용자는 가자 가까운 데이터 센터로 안내되는데, 이를 **지리적 라우팅(geoDNS-routing)**이라고 부른다.
 - 지리적 라우팅에서의 geoDNS는 사용자의 위치에 따라 도메인 이름을 알면 어떤 IP 주소로 변환할 지 결정할 수 있도록 해 주는 DNS 서비스다.
-> v7 두 개의 데이터 센터 이용 <br>
-> <img src="image-13.png" alt="두 개의 데이터 센터 이용" width="600">
+  > v7 두 개의 데이터 센터 이용 <br> > <img src="images/image-13.png" alt="두 개의 데이터 센터 이용" width="600">
 
 ## 메시지 큐
 
-<img src="image-14.png" alt="메시지 큐" width="600">
+<img src="images/image-14.png" alt="메시지 큐" width="600">
 
-<img src="image-15.png" alt="메시지 큐 구조" width="600">
+<img src="images/image-15.png" alt="메시지 큐 구조" width="600">
 
 ## 로그, 매트릭 그리고 자동화 등을 반영하여 수정한 설계안
 
-> v8 메시지 큐, 로그, 메트릭, 자동화 등을 반여앟여 수정한 설계안 <br>
-> <img src="image-16.png" alt="메시지 큐, 로그, 메트릭, 자동화가 반영된 설계안" width="600">
+> v8 메시지 큐, 로그, 메트릭, 자동화 등을 반여앟여 수정한 설계안 <br> > <img src="images/image-16.png" alt="메시지 큐, 로그, 메트릭, 자동화가 반영된 설계안" width="600">
 
 ### 메시지 큐, 로그, 메트릭, 자동화 등을 반영하여 수정한 설계안
 
@@ -204,13 +199,13 @@ CDN 동장 방법 <br>
 
 ### 수평적 확장
 
-<img src="image-17.png" alt="수평적 확장" width="600">
+<img src="images/image-17.png" alt="수평적 확장" width="600">
 
-<img src="image-18.png" alt="수평적 확장 방법" width="600">
+<img src="images/image-18.png" alt="수평적 확장 방법" width="600">
 
-<img src="image-19.png" alt="샤딩 구조" width="600">
+<img src="images/image-19.png" alt="샤딩 구조" width="600">
 
 > v9 데이터베이스 샤딩을 적용한 아키텍처
-> <img src="image-20.png" alt="데이터베이스 샤딩 적용" width="600">
+> <img src="images/image-20.png" alt="데이터베이스 샤딩 적용" width="600">
 
 ## 백만 사용자, 그리고 그 이상
