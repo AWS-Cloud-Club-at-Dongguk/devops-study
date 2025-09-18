@@ -116,9 +116,9 @@
 ### 3단계
 - 각 플로에 대한 상세 설계
 - 피드 발행
-<img src="images/6.png"  width="30%" />
+<img src="images/6.png"  width="40%" />
 - 피드 생성
-<img src="images/7.png"  width="30%" />
+<img src="images/7.png"  width="40%" />
 
 ## 💡 면접 꿀팁들
 ```
