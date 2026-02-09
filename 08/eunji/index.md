@@ -97,6 +97,8 @@ GET /api/v1/{shortUrl}
 2. 처음 7자만 사용
 3. 충돌 발생 시 → 문자열 추가 후 재시도
 
+![alt text](images/image2.png)
+
 **예시**:
 ```
 URL: https://en.wikipedia.org/wiki/Systems_design
@@ -115,6 +117,9 @@ MD5: 5a62509a... (32자)
 3. 단축 URL 생성
 
 **예시**:
+![alt text](images/image1.png)
+
+- 62진법 변환 예시
 ```
 ID: 11157₁₀
 → 62진법 변환: 2 × 62² + 55 × 62¹ + 59 × 62⁰
@@ -132,6 +137,8 @@ ID: 11157₁₀
 | 보안 | 다음 URL 예측 불가 | ID 순차 증가로 예측 가능 ⚠️ |
 
 ### URL 단축 상세 흐름
+
+![alt text](images/image.png)
 
 ```
 1. 입력: longURL
