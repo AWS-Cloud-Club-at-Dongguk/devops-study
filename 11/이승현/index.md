@@ -58,3 +58,18 @@
 - 무상태 운영: 웹 계층을 무상태(Stateless)로 유지
 - 모니터링: 트래픽 피크 시간대 QPS 및 새로고침 지연시간 확인
 
+## 아키텍처 설계
+![poster](./image.png)
+
+- Amazon Route 53: 도메인 주소를 시스템 ip와 연결
+- Amazon CloudFront: 이미지 및 비디오 등 미디어 콘텐츠 빠르게 전송
+- Application Load Balancer: 트래픽을 분산
+- Amazon EC2: 인증 및 처리율 제한 
+- Amazon ECS: 뉴스 피드 및 포스팅 저장 서비스 
+- Amazon SQS: 대량의 피드 전송 작업을 비동기 큐에 넣어 서버 부하 방지
+- Amazon Neptune: 친구 관계 및 추천 관리에 적합한 그래프 데이터베이스 
+- Amazon ElastiCache: 뉴스 피드 id 목록과 포스팅 콘텐츠를 캐싱
+- Amazon DynamoDB: 방대한 양의 포스팅 데이터 저장
+- Amazon RDS: 사용자 프로필과 같은 정형 데이터
+- Amazon SNS: 포스팅 푸쉬 알림
+
