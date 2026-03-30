@@ -86,6 +86,27 @@ GET /v1/me/feed
 - **포스팅 전송 서비스(fanout service)**: 새 포스팅을 친구의 뉴스 피드에 푸시(push)한다. 뉴스 피드 데이터는 캐시에 보관하여 빠르게 읽어갈 수 있도록 한다.
 - **알림 서비스(notification service)**: 친구들에게 새 포스팅이 올라왔음을 알리거나, 푸시 알림을 보내는 역할을 담당한다.
 
+```mermaid
+graph LR
+    User["👤 사용자<br/>(POST /v1/me/feed)"]
+    LB["로드밸런서"]
+    WS["웹 서버"]
+    PS["포스팅 저장<br/>서비스"]
+    FS["포스팅 전송<br/>서비스(fanout)"]
+    NS["알림 서비스"]
+    DB[("포스팅 DB")]
+    Cache[("포스팅 캐시")]
+    NFC[("뉴스 피드<br/>캐시")]
+
+    User --> LB --> WS
+    WS --> PS
+    WS --> FS
+    PS --> DB
+    PS --> Cache
+    FS --> NFC
+    FS --> NS
+```
+
 <br />
 
 ### 뉴스 피드 생성
@@ -97,6 +118,17 @@ GET /v1/me/feed
 - **웹 서버**: 트래픽을 뉴스 피드 서비스로 보낸다.
 - **뉴스 피드 서비스(news feed service)**: 캐시에서 뉴스 피드를 가져오는 서비스다.
 - **뉴스 피드 캐시(news feed cache)**: 뉴스 피드를 렌더링할 때 필요한 피드 ID를 보관한다.
+
+```mermaid
+graph LR
+    User["👤 사용자<br/>(GET /v1/me/feed)"]
+    LB["로드밸런서"]
+    WS["웹 서버"]
+    NFS["뉴스 피드<br/>서비스"]
+    NFC[("뉴스 피드<br/>캐시")]
+
+    User --> LB --> WS --> NFS --> NFC
+```
 
 <br />
 <br />
@@ -144,6 +176,18 @@ GET /v1/me/feed
 - **대부분의 사용자**: push 모델을 사용하여 빠르게 뉴스 피드를 갱신한다.
 - **팔로워가 아주 많은 사용자(셀럽 등)**: pull 모델을 사용하여, 해당 사용자의 포스팅은 팔로워가 피드를 읽을 때 가져가도록 한다. 이렇게 하면 핫키 문제를 방지할 수 있다.
 
+```mermaid
+graph TD
+    Post["새 포스팅 발행"]
+    Check{"팔로워 수<br/>임계치 초과?"}
+    Push["Push 모델<br/>(fanout-on-write)<br/>즉시 팔로워 캐시에 기록"]
+    Pull["Pull 모델<br/>(fanout-on-read)<br/>팔로워가 읽을 때 조회"]
+
+    Post --> Check
+    Check -- "아니오<br/>(일반 사용자)" --> Push
+    Check -- "예<br/>(셀럽/인플루언서)" --> Pull
+```
+
 <br />
 
 #### fanout 서비스의 동작 흐름
@@ -155,6 +199,24 @@ GET /v1/me/feed
    - 뉴스 피드 캐시는 `<포스팅_id, 사용자_id>` 순서쌍을 보관하는 매핑 테이블이다.
    - 메모리 크기를 적정 수준으로 유지하기 위해 캐시 크기에 제한을 두어야 한다. 대부분의 사용자가 최신 스토리에만 관심이 있으므로 캐시 미스가 일어날 확률은 낮다.
 
+```mermaid
+sequenceDiagram
+    participant WS as 웹 서버
+    participant GDB as 그래프 DB
+    participant UC as 사용자 정보 캐시
+    participant MQ as 메시지 큐
+    participant FW as Fanout 작업 서버
+    participant NFC as 뉴스 피드 캐시
+
+    WS->>GDB: 1. 친구 ID 목록 조회
+    GDB-->>WS: 친구 ID 리스트
+    WS->>UC: 2. 친구 정보 조회 + 필터링(mute 등)
+    UC-->>WS: 필터링된 친구 목록
+    WS->>MQ: 3. (친구 목록 + 포스팅 ID) 전송
+    MQ->>FW: 4. 데이터 수신
+    FW->>NFC: 뉴스 피드 캐시에 기록<br/>⟨포스팅_id, 사용자_id⟩
+```
+
 <br />
 
 ### 피드 읽기 흐름 상세 설계
@@ -165,6 +227,28 @@ GET /v1/me/feed
 4. 뉴스 피드 서비스는 뉴스 피드 캐시에서 포스팅 ID 목록을 가져온다.
 5. 뉴스 피드에 표시할 사용자 이름, 사용자 사진, 포스팅 콘텐츠, 이미지 등을 사용자 캐시와 포스팅 캐시에서 가져와 완전한 뉴스 피드를 만든다.
 6. 생성된 뉴스 피드를 JSON 형태로 클라이언트에게 보낸다. 클라이언트는 해당 피드를 렌더링한다.
+
+```mermaid
+sequenceDiagram
+    participant Client as 클라이언트
+    participant LB as 로드밸런서
+    participant WS as 웹 서버
+    participant NFS as 뉴스 피드 서비스
+    participant NFC as 뉴스 피드 캐시
+    participant UC as 사용자 캐시
+    participant PC as 포스팅 캐시
+
+    Client->>LB: 1. GET /v1/me/feed
+    LB->>WS: 2. 요청 분산
+    WS->>NFS: 3. 피드 요청
+    NFS->>NFC: 4. 포스팅 ID 목록 조회
+    NFC-->>NFS: 포스팅 ID 리스트
+    NFS->>UC: 5. 사용자 정보 조회
+    NFS->>PC: 5. 포스팅 콘텐츠 조회
+    UC-->>NFS: 사용자 이름, 사진
+    PC-->>NFS: 포스팅 콘텐츠, 이미지
+    NFS-->>Client: 6. 완전한 뉴스 피드 (JSON)
+```
 
 <br />
 
@@ -179,6 +263,33 @@ GET /v1/me/feed
 | **소셜 그래프 캐시** | 사용자 간의 관계 정보를 보관한다. |
 | **행동(action) 캐시** | 포스팅에 대한 좋아요, 답글 수 등의 정보를 보관한다. |
 | **횟수(counter) 캐시** | 좋아요 횟수, 응답 수, 팔로워 수, 팔로잉 수 등의 정보를 보관한다. |
+
+```mermaid
+graph TD
+    CDN["CDN"]
+
+    subgraph Cache["캐시 계층"]
+        NFC["뉴스 피드 캐시<br/>(피드 ID)"]
+        CC["콘텐츠 캐시<br/>(포스팅 데이터)"]
+        SGC["소셜 그래프 캐시<br/>(관계 정보)"]
+        AC["행동 캐시<br/>(좋아요, 답글)"]
+        CTC["횟수 캐시<br/>(팔로워 수 등)"]
+    end
+
+    subgraph DB["데이터베이스"]
+        PostDB[("포스팅 DB")]
+        GraphDB[("그래프 DB")]
+        UserDB[("사용자 DB")]
+    end
+
+    NFC --- CC
+    CC --- SGC
+    SGC --- AC
+    AC --- CTC
+    CC -.-> PostDB
+    SGC -.-> GraphDB
+    CTC -.-> UserDB
+```
 
 <br />
 <br />
